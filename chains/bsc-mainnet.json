@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "chainId": 56,
+  "slug": "bsc-mainnet",
+  "name": "BNB Smart Chain Mainnet",
+  "nativeCurrency": {
+    "symbol": "BNB",
+    "decimals": 18,
+    "icon": "bnb"
+  },
+  "tokens": {
+    "WBNB": {
+      "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+      "symbol": "WBNB",
+      "decimals": 18,
+      "icon": "bnb"
+    },
+    "USDT": {
+      "address": "0x55d398326f99059fF775485246999027B3197955",
+      "symbol": "USDT",
+      "decimals": 18,
+      "icon": "usdt"
+    },
+    "USDC": {
+      "address": "0x8AC76a51cc950d9822D68b83Fe1Ad97B32Cd580d",
+      "symbol": "USDC",
+      "decimals": 18,
+      "icon": "usdc"
+    },
+    "BUSD": {
+      "address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+      "symbol": "BUSD",
+      "decimals": 18,
+      "icon": "busd"
+    },
+    "DAI": {
+      "address": "0x1AF3F329e8BE154074D8769D1FFa4eE1cE3aD9",
+      "symbol": "DAI",
+      "icon": "dai"
+    },
+    "ETH": {
+      "address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+      "symbol": "ETH",
+      "icon": "eth"
+    },
+    "BTCB": {
+      "address": "0x7130d2a12b9bcbbfae4f2634d864a1ee1ce3ead9",
+      "symbol": "BTCB",
+      "icon": "btc"
+    }
+  },
+  "contracts": {
+    "wrappedNative": "WBNB"
+  },
+  "oracles": {
+    "BNB_USD": {
+      "address": "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE",
+      "adapter": "chainlink-aggregator-v3"
+    }
+  },
+  "payments": {
+    "directAssets": [
+      "WBNB",
+      "USDT",
+      "USDC"
+    ],
+    "dynamicTribeToken": true,
+    "dynamicQuoteToken": true,
+    "fallbackSwapAsset": "WBNB"
+  },
+  "reserve": {
+    "displayAssets": [
+      "WBNB",
+      "USDT",
+      "USDC"
+    ],
+    "dynamicTribeToken": true,
+    "dynamicQuoteToken": true
+  },
+  "valuation": {
+    "nativeOracle": "BNB_USD",
+    "stablecoinCandidates": [
+      "USDT",
+      "USDC"
+    ],
+    "assumeTestnetRealUsd": false
+  }
+}

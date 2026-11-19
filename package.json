@@ -1,0 +1,21 @@
+{
+  "name": "@ztribe/chain-config",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Versioned EVM chain registry and policy for zTribe",
+  "license": "MIT",
+  "exports": {
+    ".": "./index.mjs",
+    "./validate": "./validate.mjs"
+  },
+  "files": [
+    "chains",
+    "schema",
+    "index.mjs",
+    "validate.mjs",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  }
+}
