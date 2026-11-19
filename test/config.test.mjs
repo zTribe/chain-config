@@ -42,8 +42,8 @@ test("reject unsafe or misconfigured policies and duplicate assets", () => {
   assert.throws(()=>validateChainConfig(unknown),/unknown token key/);
   const fake=clone();fake.tokens.USDT.address="0x0000000000000000000000000000000000000000";
   assert.throws(()=>validateChainConfig(fake),/nonzero/);
-  const testnet=structuredClone(getChainConfig(97));testnet.valuation.stablecoinCandidates.push("USDT");
-  assert.throws(()=>validateChainConfig(testnet),/testnet assets/);
+  const testnet=structuredClone(getChainConfig(97));testnet.valuation.quotePricing.USDT={type:"fixed",usd:"1"};
+  assert.throws(()=>validateChainConfig(testnet),/testnet fixed/);
 });
 
 test("configuration is immutable and reserved property names are not assets", () => {
@@ -79,14 +79,19 @@ test("environment is explicitly typed, independent from chain name", () => {
 
 test("quote USD policies use registered addresses, not display symbols", () => {
   assert.deepEqual(getQuoteUsdPolicy(56, USDT56), {kind:"fixed", usd:"1", simulated:false});
-  assert.deepEqual(getQuoteUsdPolicy(97, USDT97), {kind:"fixed", usd:"1", simulated:true});
+  assert.deepEqual(getQuoteUsdPolicy(97, USDT97), {kind:"simulated", usd:"1", simulated:true});
   assert.equal(getQuoteUsdPolicy(97, USDT56), null);
   assert.equal(getQuoteUsdPolicy(97, getTokenByKey(97,"USDT_FAUCET").address), null);
   assert.equal(getQuoteUsdPolicy(56, getTokenByKey(56,"BTCB").address), null);
   assert.equal(getQuoteUsdPolicy(8453, USDT56), null);
   assert.equal(getQuoteUsdPolicy(56, "not-an-address"), null);
-  assert.equal(getQuoteUsdPolicy(56, getWrappedNative(56).address).kind,"native");
+  assert.equal(getQuoteUsdPolicy(56, getWrappedNative(56).address).kind,"oracle");
   assert.equal(getQuoteUsdPolicy(97, getWrappedNative(97).address).simulated,true);
-  const invalid=structuredClone(getChainConfig(97)); invalid.valuation.simulatedQuoteAssets.push("BTCB","BTCB");
-  assert.throws(()=>validateChainConfig(invalid),/duplicate or unknown/);
+  const invalid=structuredClone(getChainConfig(97)); invalid.valuation.quotePricing.BTCB={type:"oracle",feed:"MISSING"};
+  assert.throws(()=>validateChainConfig(invalid),/unknown quote oracle/);
+  invalid.valuation.quotePricing.BTCB={type:"simulated",usd:"0"};
+  assert.throws(()=>validateChainConfig(invalid),/invalid quote USD/);
+  const extra=structuredClone(getChainConfig(56)); extra.valuation.quotePricing.ETH={type:"oracle",feed:"ETH_USD"};
+  assert.throws(()=>validateChainConfig(extra),/unknown quote oracle/);
+  assert.equal(getQuoteUsdPolicy(97, getWrappedNative(97).address).usd,"600");
 });

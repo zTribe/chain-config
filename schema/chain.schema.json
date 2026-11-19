@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "zTribe EVM chain configuration v1",
+  "title": "zTribe EVM chain configuration v2",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -20,7 +20,7 @@
   ],
   "properties": {
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "chainId": {
       "type": "integer",
@@ -209,26 +209,17 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "nativeOracle",
-        "stablecoinCandidates",
-        "assumeTestnetRealUsd",
-        "simulatedQuoteAssets"
+        "quotePricing"
       ],
       "properties": {
-        "nativeOracle": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "stablecoinCandidates": {
-          "$ref": "#/$defs/keys"
-        },
-        "assumeTestnetRealUsd": {
-          "type": "boolean"
-        },
-        "simulatedQuoteAssets": {
-          "$ref": "#/$defs/keys"
+        "quotePricing": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/quotePrice"
+          }
         }
       }
     },
@@ -259,6 +250,61 @@
           "type": "boolean"
         }
       }
+    },
+    "quotePrice": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "feed"
+          ],
+          "properties": {
+            "type": {
+              "const": "oracle"
+            },
+            "feed": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9_]*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "usd"
+          ],
+          "properties": {
+            "type": {
+              "const": "fixed"
+            },
+            "usd": {
+              "type": "string",
+              "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "usd"
+          ],
+          "properties": {
+            "type": {
+              "const": "simulated"
+            },
+            "usd": {
+              "type": "string",
+              "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"
+            }
+          }
+        }
+      ]
     }
   }
 }

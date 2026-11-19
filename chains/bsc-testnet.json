@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "chainId": 97,
   "slug": "bsc-testnet",
   "name": "BNB Smart Chain Testnet",
@@ -85,13 +85,20 @@
     "dynamicQuoteToken": true
   },
   "valuation": {
-    "nativeOracle": "BNB_USD",
-    "stablecoinCandidates": [],
-    "assumeTestnetRealUsd": false,
-    "simulatedQuoteAssets": [
-      "USDT",
-      "USDC"
-    ]
+    "quotePricing": {
+      "WBNB": {
+        "type": "simulated",
+        "usd": "600"
+      },
+      "USDT": {
+        "type": "simulated",
+        "usd": "1"
+      },
+      "USDC": {
+        "type": "simulated",
+        "usd": "1"
+      }
+    }
   },
   "capabilities": {
     "payments": true,

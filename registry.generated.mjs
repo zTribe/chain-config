@@ -1,7 +1,7 @@
 // AUTO-GENERATED from chains/*.json; edit JSON and run npm run generate.
 export default [
   {
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "chainId": 56,
     "slug": "bsc-mainnet",
     "name": "BNB Smart Chain Mainnet",
@@ -75,13 +75,20 @@ export default [
       "dynamicQuoteToken": true
     },
     "valuation": {
-      "nativeOracle": "BNB_USD",
-      "stablecoinCandidates": [
-        "USDT",
-        "USDC"
-      ],
-      "assumeTestnetRealUsd": false,
-      "simulatedQuoteAssets": []
+      "quotePricing": {
+        "WBNB": {
+          "type": "oracle",
+          "feed": "BNB_USD"
+        },
+        "USDT": {
+          "type": "fixed",
+          "usd": "1"
+        },
+        "USDC": {
+          "type": "fixed",
+          "usd": "1"
+        }
+      }
     },
     "capabilities": {
       "payments": true,
@@ -91,7 +98,7 @@ export default [
     "environment": "mainnet"
   },
   {
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "chainId": 97,
     "slug": "bsc-testnet",
     "name": "BNB Smart Chain Testnet",
@@ -177,13 +184,20 @@ export default [
       "dynamicQuoteToken": true
     },
     "valuation": {
-      "nativeOracle": "BNB_USD",
-      "stablecoinCandidates": [],
-      "assumeTestnetRealUsd": false,
-      "simulatedQuoteAssets": [
-        "USDT",
-        "USDC"
-      ]
+      "quotePricing": {
+        "WBNB": {
+          "type": "simulated",
+          "usd": "600"
+        },
+        "USDT": {
+          "type": "simulated",
+          "usd": "1"
+        },
+        "USDC": {
+          "type": "simulated",
+          "usd": "1"
+        }
+      }
     },
     "capabilities": {
       "payments": true,

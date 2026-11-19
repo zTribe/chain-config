@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "chainId": 56,
   "slug": "bsc-mainnet",
   "name": "BNB Smart Chain Mainnet",
@@ -73,13 +73,20 @@
     "dynamicQuoteToken": true
   },
   "valuation": {
-    "nativeOracle": "BNB_USD",
-    "stablecoinCandidates": [
-      "USDT",
-      "USDC"
-    ],
-    "assumeTestnetRealUsd": false,
-    "simulatedQuoteAssets": []
+    "quotePricing": {
+      "WBNB": {
+        "type": "oracle",
+        "feed": "BNB_USD"
+      },
+      "USDT": {
+        "type": "fixed",
+        "usd": "1"
+      },
+      "USDC": {
+        "type": "fixed",
+        "usd": "1"
+      }
+    }
   },
   "capabilities": {
     "payments": true,

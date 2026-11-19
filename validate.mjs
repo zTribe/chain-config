@@ -14,7 +14,7 @@ function uniqueList(keys, tokens, label) {
 export function validateChainConfig(c) {
   if (!isRecord(c)) fail("root is not an object");
   keysOnly(c, ["schemaVersion","chainId","slug","name","environment","nativeCurrency","tokens","contracts","oracles","payments","reserve","valuation","capabilities"], "root");
-  if (c.schemaVersion !== 1 || !Number.isSafeInteger(c.chainId) || c.chainId < 1) fail("schemaVersion/chainId");
+  if (c.schemaVersion !== 2 || !Number.isSafeInteger(c.chainId) || c.chainId < 1) fail("schemaVersion/chainId");
   if (typeof c.slug !== "string" || !/^[a-z0-9-]+$/.test(c.slug) || typeof c.name !== "string" || !c.name) fail("slug/name");
   if (!["mainnet","testnet"].includes(c.environment)) fail("network environment");
   if (!isRecord(c.nativeCurrency)) fail("nativeCurrency");
@@ -49,17 +49,21 @@ export function validateChainConfig(c) {
   if (Object.values(c.capabilities).some(value => typeof value !== "boolean")) fail("capability flags must be boolean");
   keysOnly(c.payments,["directAssets","dynamicTribeToken","dynamicQuoteToken","fallbackSwapAsset"],"payments");
   keysOnly(c.reserve,["displayAssets","dynamicTribeToken","dynamicQuoteToken"],"reserve");
-  keysOnly(c.valuation,["nativeOracle","stablecoinCandidates","simulatedQuoteAssets","assumeTestnetRealUsd"],"valuation");
-  uniqueList(c.payments.directAssets,c.tokens,"payments.directAssets");
-  uniqueList(c.reserve.displayAssets,c.tokens,"reserve.displayAssets");
-  uniqueList(c.valuation.stablecoinCandidates,c.tokens,"valuation.stablecoinCandidates");
-  uniqueList(c.valuation.simulatedQuoteAssets,c.tokens,"valuation.simulatedQuoteAssets");
-  if (c.valuation.simulatedQuoteAssets.some(key => c.valuation.stablecoinCandidates.includes(key))) fail("quote USD sources overlap");
-  if (c.environment !== "testnet" && c.valuation.simulatedQuoteAssets.length) fail("simulated quote assets require testnet");
+  keysOnly(c.valuation,["quotePricing"],"valuation");
+  if (!isRecord(c.valuation.quotePricing)) fail("valuation.quotePricing");
+  for (const [key,source] of Object.entries(c.valuation.quotePricing)) {
+    if (!KEY.test(key) || !Object.hasOwn(c.tokens,key) || !isRecord(source)) fail("unknown quote token key: " + key);
+    if (source.type === "oracle") {
+      keysOnly(source,["type","feed"],"quotePricing." + key);
+      if (typeof source.feed !== "string" || !Object.hasOwn(c.oracles,source.feed)) fail("unknown quote oracle: " + key);
+    } else if (source.type === "fixed" || source.type === "simulated") {
+      keysOnly(source,["type","usd"],"quotePricing." + key);
+      if (typeof source.usd !== "string" || !/^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$/.test(source.usd) || !/[1-9]/.test(source.usd)) fail("invalid quote USD: " + key);
+      if (source.type === "simulated" && c.environment !== "testnet") fail("simulated quote price requires testnet");
+      if (source.type === "fixed" && c.environment === "testnet") fail("testnet fixed quote USD is not real USD");
+    } else fail("unknown quote price source: " + key);
+  }
   for (const p of [c.payments,c.reserve]) if (typeof p.dynamicTribeToken !== "boolean" || typeof p.dynamicQuoteToken !== "boolean") fail("dynamic token flags");
   if (!c.payments.directAssets.includes(c.payments.fallbackSwapAsset) || c.payments.fallbackSwapAsset !== c.contracts.wrappedNative) fail("fallback swap token must be direct-payment wrapped native");
-  if (c.valuation.nativeOracle !== null && !Object.hasOwn(c.oracles,c.valuation.nativeOracle)) fail("unknown valuation native oracle");
-  if (typeof c.valuation.assumeTestnetRealUsd !== "boolean") fail("valuation flag");
-  if (c.chainId === 97 && (c.valuation.assumeTestnetRealUsd || c.valuation.stablecoinCandidates.length)) fail("testnet assets must not be treated as real USD");
   return c;
 }
