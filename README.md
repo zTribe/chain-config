@@ -26,4 +26,4 @@ const asset = getTokenByAddress(56, "0x55d398326f99059ff775485246999027b3197955"
 const allowed = isDirectPaymentAsset(56, asset?.address);
 ```
 
-For a new EVM chain, add one `chains/<network>.json`, include its import in `index.mjs`, and run validation/tests. Chain deployment, wallet support and Indexer adapters must be verified separately before any product capability is enabled.
+For a new EVM chain, add one `chains/<network>.json`, run `npm run generate` to rebuild the import-free registry, and run validation/tests. The generated registry is checked in CI. Chain deployment, wallet support and Indexer adapters must be verified separately before any product capability is enabled.

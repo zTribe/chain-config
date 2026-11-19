@@ -45,3 +45,12 @@ test("reject unsafe or misconfigured policies and duplicate assets", () => {
   const testnet=structuredClone(getChainConfig(97));testnet.valuation.stablecoinCandidates.push("USDT");
   assert.throws(()=>validateChainConfig(testnet),/testnet assets/);
 });
+
+test("configuration is immutable and reserved property names are not assets", () => {
+  const original = getChainConfig(56).tokens.USDT.address;
+  assert.equal(Object.isFrozen(getChainConfig(56).tokens.USDT), true);
+  assert.throws(() => { getChainConfig(56).tokens.USDT.address = "0x0000000000000000000000000000000000000001"; }, TypeError);
+  assert.equal(getChainConfig(56).tokens.USDT.address, original);
+  assert.equal(getTokenByKey(56, "__proto__"), null);
+  assert.equal(getTokenByKey(56, "constructor"), null);
+});

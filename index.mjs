@@ -1,12 +1,18 @@
-import mainnet from "./chains/bsc-mainnet.json" with { type: "json" };
-import testnet from "./chains/bsc-testnet.json" with { type: "json" };
+import chainData from "./registry.generated.mjs";
 import { validateChainConfig } from "./validate.mjs";
 
 const configurations = new Map();
-for (const chain of [mainnet, testnet]) {
+function deepFreeze(value) {
+  if (value && typeof value === "object" && !Object.isFrozen(value)) {
+    for (const child of Object.values(value)) deepFreeze(child);
+    Object.freeze(value);
+  }
+  return value;
+}
+for (const chain of chainData) {
   validateChainConfig(chain);
   if (configurations.has(chain.chainId)) throw new Error("Duplicate Chain ID: " + chain.chainId);
-  configurations.set(chain.chainId, chain);
+  configurations.set(chain.chainId, deepFreeze(chain));
 }
 
 const validAddress = value => typeof value === "string" && /^0x[0-9a-fA-F]{40}$/.test(value);
@@ -21,7 +27,8 @@ export function requireChainConfig(chainId) {
   return chain;
 }
 export function getTokenByKey(chainId, key) {
-  const token = getChainConfig(chainId)?.tokens?.[key];
+  const tokens = getChainConfig(chainId)?.tokens;
+  const token = tokens && Object.hasOwn(tokens, key) ? tokens[key] : null;
   return token ? {key, ...token} : null;
 }
 export function getTokenByAddress(chainId, address) {

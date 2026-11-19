@@ -5,17 +5,25 @@
   "description": "Versioned EVM chain registry and policy for zTribe",
   "license": "MIT",
   "exports": {
-    ".": "./index.mjs",
+    ".": {
+      "types": "./index.d.mts",
+      "default": "./index.mjs"
+    },
     "./validate": "./validate.mjs"
   },
   "files": [
     "chains",
     "schema",
     "index.mjs",
+    "index.d.mts",
+    "registry.generated.mjs",
     "validate.mjs",
     "README.md"
   ],
   "scripts": {
-    "test": "node --test test/*.test.mjs"
-  }
+    "generate": "node scripts/generate-registry.mjs",
+    "check:registry": "node scripts/generate-registry.mjs --check",
+    "test": "npm run check:registry && node --test test/*.test.mjs"
+  },
+  "types": "./index.d.mts"
 }
