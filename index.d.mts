@@ -49,5 +49,5 @@ export function getOracle(chainId: number | string, key: string): OracleConfig |
 export function getWrappedNative(chainId: number | string): TokenInfo | null;
 export function validateChainConfig(config: unknown): ChainConfig;
 
-export type QuoteUsdPolicy = {kind: "oracle"; feed: string; oracle: OracleConfig; simulated: false} | {kind: "fixed" | "simulated"; usd: string; simulated: boolean};
+export type QuoteUsdPolicy = {kind: "oracle"; feed: string; oracle: OracleConfig; simulated: boolean} | {kind: "fixed" | "simulated"; usd: string; simulated: boolean};
 export function getQuoteUsdPolicy(chainId: number | string, quoteAddress: string): QuoteUsdPolicy | null;

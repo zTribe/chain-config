@@ -89,6 +89,7 @@ test("quote USD policies use registered addresses, not display symbols", () => {
   assert.equal(getQuoteUsdPolicy(56, "not-an-address"), null);
   assert.equal(getQuoteUsdPolicy(56, getWrappedNative(56).address).kind,"oracle");
   assert.equal(getQuoteUsdPolicy(97, getWrappedNative(97).address).kind,"oracle");
+  assert.equal(getQuoteUsdPolicy(97, getWrappedNative(97).address).simulated,true);
   const invalid=structuredClone(getChainConfig(97)); invalid.valuation.quotePricing.BTCB={type:"oracle",feed:"MISSING"};
   assert.throws(()=>validateChainConfig(invalid),/unknown quote oracle/);
   invalid.valuation.quotePricing.BTCB={type:"simulated",usd:"0"};
