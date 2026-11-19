@@ -13,9 +13,10 @@ function uniqueList(keys, tokens, label) {
 }
 export function validateChainConfig(c) {
   if (!isRecord(c)) fail("root is not an object");
-  keysOnly(c, ["schemaVersion","chainId","slug","name","nativeCurrency","tokens","contracts","oracles","payments","reserve","valuation","capabilities"], "root");
+  keysOnly(c, ["schemaVersion","chainId","slug","name","environment","nativeCurrency","tokens","contracts","oracles","payments","reserve","valuation","capabilities"], "root");
   if (c.schemaVersion !== 1 || !Number.isSafeInteger(c.chainId) || c.chainId < 1) fail("schemaVersion/chainId");
   if (typeof c.slug !== "string" || !/^[a-z0-9-]+$/.test(c.slug) || typeof c.name !== "string" || !c.name) fail("slug/name");
+  if (!["mainnet","testnet"].includes(c.environment)) fail("network environment");
   if (!isRecord(c.nativeCurrency)) fail("nativeCurrency");
   keysOnly(c.nativeCurrency,["symbol","decimals","icon"],"nativeCurrency");
   if (!c.nativeCurrency.symbol || !Number.isInteger(c.nativeCurrency.decimals) || c.nativeCurrency.decimals < 0 || c.nativeCurrency.decimals > 36 || !ICON.test(c.nativeCurrency.icon)) fail("native currency details");

@@ -86,7 +86,8 @@ export default [
       "payments": true,
       "reserve": true,
       "valuation": true
-    }
+    },
+    "environment": "mainnet"
   },
   {
     "schemaVersion": 1,
@@ -183,6 +184,7 @@ export default [
       "payments": true,
       "reserve": true,
       "valuation": true
-    }
+    },
+    "environment": "testnet"
   }
 ];

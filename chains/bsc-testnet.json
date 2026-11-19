@@ -93,5 +93,6 @@
     "payments": true,
     "reserve": true,
     "valuation": true
-  }
+  },
+  "environment": "testnet"
 }

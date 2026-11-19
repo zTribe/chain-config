@@ -68,3 +68,11 @@ test("all registered chains can be enumerated without mutable references", () =>
   assert.deepEqual(listChainConfigs().map(x => x.chainId).sort((a,b)=>a-b), [56,97]);
   assert.equal(Object.isFrozen(listChainConfigs()[0]), true);
 });
+
+test("environment is explicitly typed, independent from chain name", () => {
+  assert.equal(getChainConfig(56).environment, "mainnet");
+  assert.equal(getChainConfig(97).environment, "testnet");
+  const copied = structuredClone(getChainConfig(97));
+  copied.environment = "staging";
+  assert.throws(() => validateChainConfig(copied), /network environment/);
+});

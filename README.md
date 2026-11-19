@@ -2,7 +2,7 @@
 
 Public, versioned EVM chain registry for zTribe Chat/Web and Indexer.
 
-- One JSON file per chain, all validated with one schema/contract.
+- One JSON file per chain (explicit mainnet/testnet environment), all validated with one schema/contract.
 - Addresses, oracle feeds and token icon IDs are registered once per chain.
 - `tokens` only identifies assets; registration or an icon does **not** grant payment, Reserve display or USD valuation rights.
 - `payments.directAssets`, `reserve.displayAssets` and `valuation` are separate, explicit policies.

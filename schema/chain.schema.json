@@ -15,7 +15,8 @@
     "payments",
     "reserve",
     "valuation",
-    "capabilities"
+    "capabilities",
+    "environment"
   ],
   "properties": {
     "schemaVersion": {
@@ -76,6 +77,12 @@
     },
     "capabilities": {
       "$ref": "#/$defs/capabilities"
+    },
+    "environment": {
+      "enum": [
+        "mainnet",
+        "testnet"
+      ]
     }
   },
   "$defs": {

@@ -24,6 +24,7 @@ export interface ChainConfig {
   chainId: number;
   slug: string;
   name: string;
+  environment: "mainnet" | "testnet";
   nativeCurrency: {symbol: string; decimals: number; icon: string};
   capabilities: {payments: boolean; reserve: boolean; valuation: boolean};
   tokens: Readonly<Record<string, TokenConfig>>;
