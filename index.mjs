@@ -71,7 +71,7 @@ export function getQuoteUsdPolicy(chainId, quoteAddress) {
   if (!token) return null;
   const source = chain.valuation.quotePricing[token.key];
   if (!source) return null;
-  if (source.type === "oracle") return {kind: "oracle", feed: source.feed, oracle: chain.oracles[source.feed], simulated: false};
+  if (source.type === "oracle") return {kind: "oracle", feed: source.feed, oracle: chain.oracles[source.feed], simulated: chain.environment === "testnet"};
   return {kind: source.type, usd: source.usd, simulated: source.type === "simulated"};
 }
 export { validateChainConfig } from "./validate.mjs";
