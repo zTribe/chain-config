@@ -60,7 +60,7 @@ export function validateChainConfig(c) {
       if (typeof source.feed !== "string" || !Object.hasOwn(c.oracles,source.feed)) fail("unknown quote oracle: " + key);
     } else if (source.type === "fixed" || source.type === "simulated") {
       keysOnly(source,["type","usd"],"quotePricing." + key);
-      if (typeof source.usd !== "string" || !/^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$/.test(source.usd) || !/[1-9]/.test(source.usd)) fail("invalid quote USD: " + key);
+      if (typeof source.usd !== "string" || !/^(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$/.test(source.usd) || !/[1-9]/.test(source.usd)) fail("invalid quote USD: " + key);
       if (source.type === "simulated" && c.environment !== "testnet") fail("simulated quote price requires testnet");
       if (source.type === "fixed" && c.environment === "testnet") fail("testnet fixed quote USD is not real USD");
     } else fail("unknown quote price source: " + key);

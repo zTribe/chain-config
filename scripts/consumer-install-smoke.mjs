@@ -21,7 +21,7 @@ try {
     name: "chain-config-consumer-smoke", lockfileVersion: 3, requires: true,
     packages: {
       "": {name: "chain-config-consumer-smoke", dependencies: {[packageName]:url}},
-      "node_modules/@ztribe/chain-config": {version: "0.1.1", resolved: url, license: "MIT"}
+      "node_modules/@ztribe/chain-config": {version: "0.3.0", resolved: url, license: "MIT"}
     }
   }));
   run("npm", ["ci", "--ignore-scripts", "--no-audit", "--no-fund"]);

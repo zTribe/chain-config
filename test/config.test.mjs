@@ -95,3 +95,16 @@ test("quote USD policies use registered addresses, not display symbols", () => {
   assert.throws(()=>validateChainConfig(extra),/unknown quote oracle/);
   assert.equal(getQuoteUsdPolicy(97, getWrappedNative(97).address).usd,"600");
 });
+
+test("decimal USD quotes and price source validation are consistent", () => {
+  const good=structuredClone(getChainConfig(56));
+  good.valuation.quotePricing.USDT={type:"fixed",usd:"1.25"};
+  assert.doesNotThrow(()=>validateChainConfig(good));
+  const tiny=structuredClone(getChainConfig(97));
+  tiny.valuation.quotePricing.USDC={type:"simulated",usd:"0.000001"};
+  assert.doesNotThrow(()=>validateChainConfig(tiny));
+  for (const invalidUsd of ["0","0.0","1\\x25","-1","1e8","Infinity","NaN","1."]) {
+    good.valuation.quotePricing.USDT={type:"fixed",usd:invalidUsd};
+    assert.throws(()=>validateChainConfig(good),/invalid quote USD/,invalidUsd);
+  }
+});
