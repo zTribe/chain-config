@@ -87,6 +87,10 @@ export default [
         "USDC": {
           "type": "fixed",
           "usd": "1"
+        },
+        "BUSD": {
+          "type": "fixed",
+          "usd": "1"
         }
       }
     },

@@ -83,6 +83,7 @@ test("quote USD policies use registered addresses, not display symbols", () => {
   assert.equal(getQuoteUsdPolicy(97, USDT56), null);
   assert.equal(getQuoteUsdPolicy(97, getTokenByKey(97,"USDT_FAUCET").address), null);
   assert.equal(getQuoteUsdPolicy(56, getTokenByKey(56,"BTCB").address), null);
+  assert.deepEqual(getQuoteUsdPolicy(56,getTokenByKey(56,"BUSD").address),{kind:"fixed",usd:"1",simulated:false});
   assert.equal(getQuoteUsdPolicy(8453, USDT56), null);
   assert.equal(getQuoteUsdPolicy(56, "not-an-address"), null);
   assert.equal(getQuoteUsdPolicy(56, getWrappedNative(56).address).kind,"oracle");
