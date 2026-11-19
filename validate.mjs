@@ -49,6 +49,8 @@ export function validateChainConfig(c) {
   if (Object.values(c.capabilities).some(value => typeof value !== "boolean")) fail("capability flags must be boolean");
   keysOnly(c.payments,["directAssets","dynamicTribeToken","dynamicQuoteToken","fallbackSwapAsset"],"payments");
   keysOnly(c.reserve,["displayAssets","dynamicTribeToken","dynamicQuoteToken"],"reserve");
+  uniqueList(c.payments.directAssets,c.tokens,"payments.directAssets");
+  uniqueList(c.reserve.displayAssets,c.tokens,"reserve.displayAssets");
   keysOnly(c.valuation,["quotePricing"],"valuation");
   if (!isRecord(c.valuation.quotePricing)) fail("valuation.quotePricing");
   for (const [key,source] of Object.entries(c.valuation.quotePricing)) {
