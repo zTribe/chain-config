@@ -81,6 +81,11 @@ export default [
         "USDC"
       ],
       "assumeTestnetRealUsd": false
+    },
+    "capabilities": {
+      "payments": true,
+      "reserve": true,
+      "valuation": true
     }
   },
   {
@@ -173,6 +178,11 @@ export default [
       "nativeOracle": "BNB_USD",
       "stablecoinCandidates": [],
       "assumeTestnetRealUsd": false
+    },
+    "capabilities": {
+      "payments": true,
+      "reserve": true,
+      "valuation": true
     }
   }
 ];

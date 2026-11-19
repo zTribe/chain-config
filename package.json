@@ -1,6 +1,6 @@
 {
   "name": "@ztribe/chain-config",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Versioned EVM chain registry and policy for zTribe",
   "license": "MIT",

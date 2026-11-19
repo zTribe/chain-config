@@ -13,7 +13,7 @@ function uniqueList(keys, tokens, label) {
 }
 export function validateChainConfig(c) {
   if (!isRecord(c)) fail("root is not an object");
-  keysOnly(c, ["schemaVersion","chainId","slug","name","nativeCurrency","tokens","contracts","oracles","payments","reserve","valuation"], "root");
+  keysOnly(c, ["schemaVersion","chainId","slug","name","nativeCurrency","tokens","contracts","oracles","payments","reserve","valuation","capabilities"], "root");
   if (c.schemaVersion !== 1 || !Number.isSafeInteger(c.chainId) || c.chainId < 1) fail("schemaVersion/chainId");
   if (typeof c.slug !== "string" || !/^[a-z0-9-]+$/.test(c.slug) || typeof c.name !== "string" || !c.name) fail("slug/name");
   if (!isRecord(c.nativeCurrency)) fail("nativeCurrency");
@@ -43,7 +43,9 @@ export function validateChainConfig(c) {
     verifyAddress(oracle.address,"oracles." + key);
     if (!["chainlink-aggregator-v3","binance-oracle-aggregator-v3"].includes(oracle.adapter)) fail("unknown oracle adapter");
   }
-  if (!isRecord(c.payments) || !isRecord(c.reserve) || !isRecord(c.valuation)) fail("policies");
+  if (!isRecord(c.payments) || !isRecord(c.reserve) || !isRecord(c.valuation) || !isRecord(c.capabilities)) fail("policies/capabilities");
+  keysOnly(c.capabilities,["payments","reserve","valuation"],"capabilities");
+  if (Object.values(c.capabilities).some(value => typeof value !== "boolean")) fail("capability flags must be boolean");
   keysOnly(c.payments,["directAssets","dynamicTribeToken","dynamicQuoteToken","fallbackSwapAsset"],"payments");
   keysOnly(c.reserve,["displayAssets","dynamicTribeToken","dynamicQuoteToken"],"reserve");
   keysOnly(c.valuation,["nativeOracle","stablecoinCandidates","assumeTestnetRealUsd"],"valuation");

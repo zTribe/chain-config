@@ -25,6 +25,7 @@ export interface ChainConfig {
   slug: string;
   name: string;
   nativeCurrency: {symbol: string; decimals: number; icon: string};
+  capabilities: {payments: boolean; reserve: boolean; valuation: boolean};
   tokens: Readonly<Record<string, TokenConfig>>;
   contracts: {wrappedNative: string};
   oracles: Readonly<Record<string, OracleConfig>>;

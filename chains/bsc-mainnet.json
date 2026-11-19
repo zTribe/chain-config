@@ -79,5 +79,10 @@
       "USDC"
     ],
     "assumeTestnetRealUsd": false
+  },
+  "capabilities": {
+    "payments": true,
+    "reserve": true,
+    "valuation": true
   }
 }

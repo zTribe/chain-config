@@ -14,7 +14,8 @@
     "oracles",
     "payments",
     "reserve",
-    "valuation"
+    "valuation",
+    "capabilities"
   ],
   "properties": {
     "schemaVersion": {
@@ -72,6 +73,9 @@
     },
     "valuation": {
       "$ref": "#/$defs/valuation"
+    },
+    "capabilities": {
+      "$ref": "#/$defs/capabilities"
     }
   },
   "$defs": {
@@ -223,6 +227,26 @@
       "items": {
         "type": "string",
         "minLength": 1
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payments",
+        "reserve",
+        "valuation"
+      ],
+      "properties": {
+        "payments": {
+          "type": "boolean"
+        },
+        "reserve": {
+          "type": "boolean"
+        },
+        "valuation": {
+          "type": "boolean"
+        }
       }
     }
   }

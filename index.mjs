@@ -40,17 +40,19 @@ export function getTokenByAddress(chainId, address) {
 /** Returns only configured fixed assets; dynamic Tribe/Quote assets require consumer-side trusted context. */
 export function isDirectPaymentAsset(chainId, address) {
   const token = getTokenByAddress(chainId, address);
-  return Boolean(token && getChainConfig(chainId).payments.directAssets.includes(token.key));
+  return Boolean(token && getChainConfig(chainId).capabilities.payments && getChainConfig(chainId).payments.directAssets.includes(token.key));
 }
 export function isReserveDisplayAsset(chainId, address) {
   const token = getTokenByAddress(chainId, address);
-  return Boolean(token && getChainConfig(chainId).reserve.displayAssets.includes(token.key));
+  return Boolean(token && getChainConfig(chainId).capabilities.reserve && getChainConfig(chainId).reserve.displayAssets.includes(token.key));
 }
 export function getPaymentPolicy(chainId) {
-  return getChainConfig(chainId)?.payments ?? null;
+  const chain = getChainConfig(chainId);
+  return chain?.capabilities.payments ? chain.payments : null;
 }
 export function getReservePolicy(chainId) {
-  return getChainConfig(chainId)?.reserve ?? null;
+  const chain = getChainConfig(chainId);
+  return chain?.capabilities.reserve ? chain.reserve : null;
 }
 export function getOracle(chainId, key) {
   return getChainConfig(chainId)?.oracles?.[key] ?? null;

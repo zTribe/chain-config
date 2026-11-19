@@ -54,3 +54,12 @@ test("configuration is immutable and reserved property names are not assets", ()
   assert.equal(getTokenByKey(56, "__proto__"), null);
   assert.equal(getTokenByKey(56, "constructor"), null);
 });
+
+test("features for newly configured networks are explicit and fail closed", () => {
+  const disabled = structuredClone(getChainConfig(56));
+  disabled.capabilities.payments = false;
+  disabled.capabilities.reserve = false;
+  validateChainConfig(disabled);
+  assert.throws(() => validateChainConfig({...disabled,capabilities:{payments:"true",reserve:false,valuation:true}}), /capability flags/);
+  assert.throws(() => validateChainConfig({...disabled,capabilities:{payments:false,reserve:false}}), /missing: valuation/);
+});
