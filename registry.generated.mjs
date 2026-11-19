@@ -52,7 +52,8 @@ export default [
     "oracles": {
       "BNB_USD": {
         "address": "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE",
-        "adapter": "chainlink-aggregator-v3"
+        "adapter": "chainlink-aggregator-v3",
+        "maxAgeSeconds": 7200
       }
     },
     "payments": {
@@ -165,7 +166,38 @@ export default [
     "oracles": {
       "BNB_USD": {
         "address": "0x1A26d803C2e796601794f8C5609549643832702C",
-        "adapter": "binance-oracle-aggregator-v3"
+        "adapter": "binance-oracle-aggregator-v3",
+        "maxAgeSeconds": 129600
+      },
+      "ETH_USD": {
+        "address": "0x635780E5D02Ab29d7aE14d266936A38d3D5B0CC5",
+        "adapter": "binance-oracle-aggregator-v3",
+        "maxAgeSeconds": 129600
+      },
+      "BTC_USD": {
+        "address": "0x491fD333937522e69D1c3FB944fbC5e95eEF9f59",
+        "adapter": "binance-oracle-aggregator-v3",
+        "maxAgeSeconds": 129600
+      },
+      "USDT_USD": {
+        "address": "0x22f15736aB9A5b944B6ec41bAeE2782e0f1B7724",
+        "adapter": "binance-oracle-aggregator-v3",
+        "maxAgeSeconds": 129600
+      },
+      "USDC_USD": {
+        "address": "0x053Fc65249dF91a02Ddb294A081f774615aB45F4",
+        "adapter": "binance-oracle-aggregator-v3",
+        "maxAgeSeconds": 129600
+      },
+      "BUSD_USD": {
+        "address": "0x48D87A2d14De41E2308A764905B93E05c9377cE1",
+        "adapter": "binance-oracle-aggregator-v3",
+        "maxAgeSeconds": 129600
+      },
+      "DAI_USD": {
+        "address": "0x46B48c1Ef4B5F15B7DdC415290CEC2f774cD1021",
+        "adapter": "binance-oracle-aggregator-v3",
+        "maxAgeSeconds": 129600
       }
     },
     "payments": {
@@ -190,16 +222,32 @@ export default [
     "valuation": {
       "quotePricing": {
         "WBNB": {
-          "type": "simulated",
-          "usd": "600"
+          "type": "oracle",
+          "feed": "BNB_USD"
         },
         "USDT": {
-          "type": "simulated",
-          "usd": "1"
+          "type": "oracle",
+          "feed": "USDT_USD"
         },
         "USDC": {
-          "type": "simulated",
-          "usd": "1"
+          "type": "oracle",
+          "feed": "USDC_USD"
+        },
+        "ETH": {
+          "type": "oracle",
+          "feed": "ETH_USD"
+        },
+        "BTCB": {
+          "type": "oracle",
+          "feed": "BTC_USD"
+        },
+        "BUSD": {
+          "type": "oracle",
+          "feed": "BUSD_USD"
+        },
+        "DAI": {
+          "type": "oracle",
+          "feed": "DAI_USD"
         }
       }
     },

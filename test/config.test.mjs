@@ -79,7 +79,8 @@ test("environment is explicitly typed, independent from chain name", () => {
 
 test("quote USD policies use registered addresses, not display symbols", () => {
   assert.deepEqual(getQuoteUsdPolicy(56, USDT56), {kind:"fixed", usd:"1", simulated:false});
-  assert.deepEqual(getQuoteUsdPolicy(97, USDT97), {kind:"simulated", usd:"1", simulated:true});
+  assert.equal(getQuoteUsdPolicy(97, USDT97).kind,"oracle");
+  assert.equal(getQuoteUsdPolicy(97, USDT97).oracle.adapter,"binance-oracle-aggregator-v3");
   assert.equal(getQuoteUsdPolicy(97, USDT56), null);
   assert.equal(getQuoteUsdPolicy(97, getTokenByKey(97,"USDT_FAUCET").address), null);
   assert.equal(getQuoteUsdPolicy(56, getTokenByKey(56,"BTCB").address), null);
@@ -87,14 +88,14 @@ test("quote USD policies use registered addresses, not display symbols", () => {
   assert.equal(getQuoteUsdPolicy(8453, USDT56), null);
   assert.equal(getQuoteUsdPolicy(56, "not-an-address"), null);
   assert.equal(getQuoteUsdPolicy(56, getWrappedNative(56).address).kind,"oracle");
-  assert.equal(getQuoteUsdPolicy(97, getWrappedNative(97).address).simulated,true);
+  assert.equal(getQuoteUsdPolicy(97, getWrappedNative(97).address).kind,"oracle");
   const invalid=structuredClone(getChainConfig(97)); invalid.valuation.quotePricing.BTCB={type:"oracle",feed:"MISSING"};
   assert.throws(()=>validateChainConfig(invalid),/unknown quote oracle/);
   invalid.valuation.quotePricing.BTCB={type:"simulated",usd:"0"};
   assert.throws(()=>validateChainConfig(invalid),/invalid quote USD/);
   const extra=structuredClone(getChainConfig(56)); extra.valuation.quotePricing.ETH={type:"oracle",feed:"ETH_USD"};
   assert.throws(()=>validateChainConfig(extra),/unknown quote oracle/);
-  assert.equal(getQuoteUsdPolicy(97, getWrappedNative(97).address).usd,"600");
+  assert.equal(getQuoteUsdPolicy(97, getWrappedNative(97).address).oracle.maxAgeSeconds,129600);
 });
 
 test("decimal USD quotes and price source validation are consistent", () => {
@@ -108,4 +109,19 @@ test("decimal USD quotes and price source validation are consistent", () => {
     good.valuation.quotePricing.USDT={type:"fixed",usd:invalidUsd};
     assert.throws(()=>validateChainConfig(good),/invalid quote USD/,invalidUsd);
   }
+});
+
+test("testnet quote feeds have official dedicated adapters and bounded age", () => {
+  const configured=getChainConfig(97);
+  for(const key of ["WBNB","ETH","BTCB","USDT","USDC","BUSD","DAI"]) {
+    const result=getQuoteUsdPolicy(97,configured.tokens[key].address);
+    assert.equal(result.kind,"oracle",key);
+    assert.equal(result.oracle.adapter,"binance-oracle-aggregator-v3",key);
+    assert.equal(result.oracle.maxAgeSeconds,129600,key);
+  }
+  const bad=structuredClone(configured);
+  bad.oracles.BNB_USD.maxAgeSeconds=-1;
+  assert.throws(()=>validateChainConfig(bad),/maxAgeSeconds/);
+  bad.oracles.BNB_USD.maxAgeSeconds=129600;
+  assert.doesNotThrow(()=>validateChainConfig(bad));
 });

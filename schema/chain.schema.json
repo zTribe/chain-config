@@ -157,6 +157,11 @@
             "chainlink-aggregator-v3",
             "binance-oracle-aggregator-v3"
           ]
+        },
+        "maxAgeSeconds": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 604800
         }
       }
     },

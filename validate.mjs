@@ -40,7 +40,9 @@ export function validateChainConfig(c) {
   if (!isRecord(c.oracles)) fail("oracles");
   for (const [key, oracle] of Object.entries(c.oracles)) {
     if (!KEY.test(key) || !isRecord(oracle)) fail("oracle " + key);
-    keysOnly(oracle,["address","adapter"],"oracles." + key);
+    for (const field of Object.keys(oracle)) if (!["address","adapter","maxAgeSeconds"].includes(field)) fail("oracles." + key + " unexpected field: " + field);
+    for (const field of ["address","adapter"]) if (!(field in oracle)) fail("oracles." + key + " missing: " + field);
+    if ("maxAgeSeconds" in oracle && (!Number.isSafeInteger(oracle.maxAgeSeconds) || oracle.maxAgeSeconds < 60 || oracle.maxAgeSeconds > 604800)) fail("invalid oracle maxAgeSeconds: " + key);
     verifyAddress(oracle.address,"oracles." + key);
     if (!["chainlink-aggregator-v3","binance-oracle-aggregator-v3"].includes(oracle.adapter)) fail("unknown oracle adapter");
   }

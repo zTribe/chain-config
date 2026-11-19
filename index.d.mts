@@ -7,6 +7,7 @@ export interface TokenConfig {
 export interface OracleConfig {
   address: string;
   adapter: "chainlink-aggregator-v3" | "binance-oracle-aggregator-v3";
+  maxAgeSeconds?: number;
 }
 export interface PaymentPolicy {
   directAssets: readonly string[];
