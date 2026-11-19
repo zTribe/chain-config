@@ -12,3 +12,4 @@ jobs:
           node-version: '24'
       - run: npm test
       - run: npm pack --dry-run
+      - run: node scripts/consumer-install-smoke.mjs
