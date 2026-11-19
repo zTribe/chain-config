@@ -49,10 +49,13 @@ export function validateChainConfig(c) {
   if (Object.values(c.capabilities).some(value => typeof value !== "boolean")) fail("capability flags must be boolean");
   keysOnly(c.payments,["directAssets","dynamicTribeToken","dynamicQuoteToken","fallbackSwapAsset"],"payments");
   keysOnly(c.reserve,["displayAssets","dynamicTribeToken","dynamicQuoteToken"],"reserve");
-  keysOnly(c.valuation,["nativeOracle","stablecoinCandidates","assumeTestnetRealUsd"],"valuation");
+  keysOnly(c.valuation,["nativeOracle","stablecoinCandidates","simulatedQuoteAssets","assumeTestnetRealUsd"],"valuation");
   uniqueList(c.payments.directAssets,c.tokens,"payments.directAssets");
   uniqueList(c.reserve.displayAssets,c.tokens,"reserve.displayAssets");
   uniqueList(c.valuation.stablecoinCandidates,c.tokens,"valuation.stablecoinCandidates");
+  uniqueList(c.valuation.simulatedQuoteAssets,c.tokens,"valuation.simulatedQuoteAssets");
+  if (c.valuation.simulatedQuoteAssets.some(key => c.valuation.stablecoinCandidates.includes(key))) fail("quote USD sources overlap");
+  if (c.environment !== "testnet" && c.valuation.simulatedQuoteAssets.length) fail("simulated quote assets require testnet");
   for (const p of [c.payments,c.reserve]) if (typeof p.dynamicTribeToken !== "boolean" || typeof p.dynamicQuoteToken !== "boolean") fail("dynamic token flags");
   if (!c.payments.directAssets.includes(c.payments.fallbackSwapAsset) || c.payments.fallbackSwapAsset !== c.contracts.wrappedNative) fail("fallback swap token must be direct-payment wrapped native");
   if (c.valuation.nativeOracle !== null && !Object.hasOwn(c.oracles,c.valuation.nativeOracle)) fail("unknown valuation native oracle");

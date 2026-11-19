@@ -63,4 +63,23 @@ export function getWrappedNative(chainId) {
   const chain = getChainConfig(chainId);
   return chain ? getTokenByKey(chainId, chain.contracts.wrappedNative) : null;
 }
+/** USD conversion policy for a trusted token quote address. Never uses symbol matching. */
+export function getQuoteUsdPolicy(chainId, quoteAddress) {
+  const chain = getChainConfig(chainId);
+  if (!chain?.capabilities.valuation) return null;
+  const token = getTokenByAddress(chainId, quoteAddress);
+  if (!token) return null;
+  if (token.key === chain.contracts.wrappedNative) {
+    const oracleKey = chain.valuation.nativeOracle;
+    if (!oracleKey) return null;
+    return { kind: "native", oracle: chain.oracles[oracleKey], simulated: chain.environment === "testnet" };
+  }
+  if (chain.valuation.stablecoinCandidates.includes(token.key)) {
+    return { kind: "fixed", usd: "1", simulated: false };
+  }
+  if (chain.valuation.simulatedQuoteAssets.includes(token.key)) {
+    return { kind: "fixed", usd: "1", simulated: true };
+  }
+  return null;
+}
 export { validateChainConfig } from "./validate.mjs";

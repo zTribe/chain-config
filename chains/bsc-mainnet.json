@@ -78,7 +78,8 @@
       "USDT",
       "USDC"
     ],
-    "assumeTestnetRealUsd": false
+    "assumeTestnetRealUsd": false,
+    "simulatedQuoteAssets": []
   },
   "capabilities": {
     "payments": true,

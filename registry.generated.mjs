@@ -80,7 +80,8 @@ export default [
         "USDT",
         "USDC"
       ],
-      "assumeTestnetRealUsd": false
+      "assumeTestnetRealUsd": false,
+      "simulatedQuoteAssets": []
     },
     "capabilities": {
       "payments": true,
@@ -178,7 +179,11 @@ export default [
     "valuation": {
       "nativeOracle": "BNB_USD",
       "stablecoinCandidates": [],
-      "assumeTestnetRealUsd": false
+      "assumeTestnetRealUsd": false,
+      "simulatedQuoteAssets": [
+        "USDT",
+        "USDC"
+      ]
     },
     "capabilities": {
       "payments": true,

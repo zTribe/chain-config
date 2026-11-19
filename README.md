@@ -27,3 +27,7 @@ const allowed = isDirectPaymentAsset(56, asset?.address);
 ```
 
 For a new EVM chain, default all capabilities to false until protocol and indexer verification. Add one `chains/<network>.json`, run `npm run generate` to rebuild the import-free registry, and run validation/tests. The generated registry is checked in CI. Chain deployment, wallet support and Indexer adapters must be verified separately before any product capability is enabled.
+
+## Quote Token → USD policy
+
+Use `getQuoteUsdPolicy(chainId, trustedQuoteTokenAddress)` to resolve a token's **actual quote asset** by chain and contract address, never by its display symbol. The result is `{kind:"native", oracle, simulated}` for wrapped native assets, `{kind:"fixed",usd:"1",simulated}` for configured stable quotes, or `null` for unknown assets. Mainnet stable quotes are a 1 USD approximation, not a live peg check. Testnet stable quotes are explicitly simulated and must not be reported as real USD. The caller obtains the native asset's price from the configured oracle or from its explicitly simulated testnet source. Payment and Reserve display policy remain independent.

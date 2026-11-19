@@ -87,7 +87,11 @@
   "valuation": {
     "nativeOracle": "BNB_USD",
     "stablecoinCandidates": [],
-    "assumeTestnetRealUsd": false
+    "assumeTestnetRealUsd": false,
+    "simulatedQuoteAssets": [
+      "USDT",
+      "USDC"
+    ]
   },
   "capabilities": {
     "payments": true,

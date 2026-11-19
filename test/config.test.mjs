@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { getChainConfig, requireChainConfig, getTokenByKey, getTokenByAddress, getWrappedNative,
-  getOracle, getPaymentPolicy, listChainConfigs, isDirectPaymentAsset, isReserveDisplayAsset, validateChainConfig } from "../index.mjs";
+  getOracle, getPaymentPolicy, listChainConfigs, isDirectPaymentAsset, isReserveDisplayAsset, getQuoteUsdPolicy, validateChainConfig } from "../index.mjs";
 
 const USDT56 = "0x55d398326f99059ff775485246999027b3197955";
 const USDT97 = "0x337610d27c682e347c9cd60bd4b3b107c9d34ddd";
@@ -75,4 +75,18 @@ test("environment is explicitly typed, independent from chain name", () => {
   const copied = structuredClone(getChainConfig(97));
   copied.environment = "staging";
   assert.throws(() => validateChainConfig(copied), /network environment/);
+});
+
+test("quote USD policies use registered addresses, not display symbols", () => {
+  assert.deepEqual(getQuoteUsdPolicy(56, USDT56), {kind:"fixed", usd:"1", simulated:false});
+  assert.deepEqual(getQuoteUsdPolicy(97, USDT97), {kind:"fixed", usd:"1", simulated:true});
+  assert.equal(getQuoteUsdPolicy(97, USDT56), null);
+  assert.equal(getQuoteUsdPolicy(97, getTokenByKey(97,"USDT_FAUCET").address), null);
+  assert.equal(getQuoteUsdPolicy(56, getTokenByKey(56,"BTCB").address), null);
+  assert.equal(getQuoteUsdPolicy(8453, USDT56), null);
+  assert.equal(getQuoteUsdPolicy(56, "not-an-address"), null);
+  assert.equal(getQuoteUsdPolicy(56, getWrappedNative(56).address).kind,"native");
+  assert.equal(getQuoteUsdPolicy(97, getWrappedNative(97).address).simulated,true);
+  const invalid=structuredClone(getChainConfig(97)); invalid.valuation.simulatedQuoteAssets.push("BTCB","BTCB");
+  assert.throws(()=>validateChainConfig(invalid),/duplicate or unknown/);
 });

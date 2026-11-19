@@ -211,7 +211,8 @@
       "required": [
         "nativeOracle",
         "stablecoinCandidates",
-        "assumeTestnetRealUsd"
+        "assumeTestnetRealUsd",
+        "simulatedQuoteAssets"
       ],
       "properties": {
         "nativeOracle": {
@@ -225,6 +226,9 @@
         },
         "assumeTestnetRealUsd": {
           "type": "boolean"
+        },
+        "simulatedQuoteAssets": {
+          "$ref": "#/$defs/keys"
         }
       }
     },

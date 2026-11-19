@@ -32,7 +32,7 @@ export interface ChainConfig {
   oracles: Readonly<Record<string, OracleConfig>>;
   payments: PaymentPolicy;
   reserve: ReservePolicy;
-  valuation: {nativeOracle: string | null; stablecoinCandidates: readonly string[]; assumeTestnetRealUsd: boolean};
+  valuation: {nativeOracle: string | null; stablecoinCandidates: readonly string[]; simulatedQuoteAssets: readonly string[]; assumeTestnetRealUsd: boolean};
 }
 export type TokenInfo = TokenConfig & { key: string };
 export function listChainConfigs(): readonly ChainConfig[];
@@ -47,3 +47,6 @@ export function getReservePolicy(chainId: number | string): ReservePolicy | null
 export function getOracle(chainId: number | string, key: string): OracleConfig | null;
 export function getWrappedNative(chainId: number | string): TokenInfo | null;
 export function validateChainConfig(config: unknown): ChainConfig;
+
+export type QuoteUsdPolicy = {kind: "fixed"; usd: string; simulated: boolean} | {kind: "native"; oracle: OracleConfig; simulated: boolean};
+export function getQuoteUsdPolicy(chainId: number | string, quoteAddress: string): QuoteUsdPolicy | null;
