@@ -17,6 +17,8 @@ for (const chain of chainData) {
 
 const validAddress = value => typeof value === "string" && /^0x[0-9a-fA-F]{40}$/.test(value);
 
+/** Immutable snapshots of all registered networks; no network calls. */
+export function listChainConfigs() { return [...configurations.values()]; }
 export function getChainConfig(chainId) {
   if (!Number.isSafeInteger(Number(chainId))) return null;
   return configurations.get(Number(chainId)) ?? null;

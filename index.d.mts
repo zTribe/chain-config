@@ -34,6 +34,7 @@ export interface ChainConfig {
   valuation: {nativeOracle: string | null; stablecoinCandidates: readonly string[]; assumeTestnetRealUsd: boolean};
 }
 export type TokenInfo = TokenConfig & { key: string };
+export function listChainConfigs(): readonly ChainConfig[];
 export function getChainConfig(chainId: number | string): ChainConfig | null;
 export function requireChainConfig(chainId: number | string): ChainConfig;
 export function getTokenByKey(chainId: number | string, key: string): TokenInfo | null;

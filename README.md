@@ -20,7 +20,7 @@ npm test
 Usage:
 
 ```js
-import { getChainConfig, getTokenByAddress, isDirectPaymentAsset } from "@ztribe/chain-config";
+import { getChainConfig, listChainConfigs, getTokenByAddress, isDirectPaymentAsset } from "@ztribe/chain-config";
 const chain = getChainConfig(56);
 const asset = getTokenByAddress(56, "0x55d398326f99059ff775485246999027b3197955");
 const allowed = isDirectPaymentAsset(56, asset?.address);

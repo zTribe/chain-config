@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { getChainConfig, requireChainConfig, getTokenByKey, getTokenByAddress, getWrappedNative,
-  getOracle, getPaymentPolicy, isDirectPaymentAsset, isReserveDisplayAsset, validateChainConfig } from "../index.mjs";
+  getOracle, getPaymentPolicy, listChainConfigs, isDirectPaymentAsset, isReserveDisplayAsset, validateChainConfig } from "../index.mjs";
 
 const USDT56 = "0x55d398326f99059ff775485246999027b3197955";
 const USDT97 = "0x337610d27c682e347c9cd60bd4b3b107c9d34ddd";
@@ -62,4 +62,9 @@ test("features for newly configured networks are explicit and fail closed", () =
   validateChainConfig(disabled);
   assert.throws(() => validateChainConfig({...disabled,capabilities:{payments:"true",reserve:false,valuation:true}}), /capability flags/);
   assert.throws(() => validateChainConfig({...disabled,capabilities:{payments:false,reserve:false}}), /missing: valuation/);
+});
+
+test("all registered chains can be enumerated without mutable references", () => {
+  assert.deepEqual(listChainConfigs().map(x => x.chainId).sort((a,b)=>a-b), [56,97]);
+  assert.equal(Object.isFrozen(listChainConfigs()[0]), true);
 });
